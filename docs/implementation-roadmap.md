@@ -35,7 +35,7 @@ Milestones are evidence gates, not calendar promises. A milestone is complete on
 
 The following sections define the scope of each milestone. No work from a later milestone is required to complete an earlier one.
 
-### M0: Foundation (current)
+### M0: Foundation (complete)
 
 **Goal:** demonstrate a small, runnable core.
 
@@ -60,7 +60,7 @@ Checklist:
 - [x] Implement field metadata, nesting, schema generation, and parsing.
 - [x] Add contract tests for a nested DTO and server-side validation.
 - [x] Write the README, development context, license, and roadmap.
-- [ ] Make the initial commit after repository ownership and remote are chosen.
+- [x] Make the initial commit.
 
 ### M1: End-to-End Cake Shop Demonstration
 
