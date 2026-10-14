@@ -1,6 +1,6 @@
 {
   "name": "@blueprint-engine/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Declarative TypeScript blueprints for server-defined forms and validated commands.",
   "type": "module",
   "author": "Lucas Mafra Pinheiro <lucasmafrapinheiro@gmail.com>",
