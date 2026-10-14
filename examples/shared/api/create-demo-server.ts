@@ -14,7 +14,11 @@ export interface DemoContext {
   id: string
 }
 
-export type DemoContextResolver = (request: IncomingMessage) => DemoContext
+export interface DemoProfile {
+  key: string
+  label: string
+  context: DemoContext
+}
 
 const webRoot = resolve(process.cwd(), 'examples/shared/web')
 const maxBodyBytes = 1_000_000
@@ -55,14 +59,26 @@ async function serveAsset(pathname: string, response: ServerResponse): Promise<v
   response.end(content)
 }
 
-export function createDemoServer(products: readonly DemoProduct[], resolveContext: DemoContextResolver): Server {
+function resolveDemoProfile(url: URL, profiles: readonly DemoProfile[]): DemoProfile {
+  const key = url.searchParams.get('profile') ?? profiles[0]?.key
+  const profile = profiles.find((candidate) => candidate.key === key)
+  if (!profile) throw new Error('Unknown demo profile.')
+  return profile
+}
+
+export function createDemoServer(products: readonly DemoProduct[], profiles: readonly DemoProfile[]): Server {
   return createServer(async (request, response) => {
     const url = new URL(request.url ?? '/', 'http://localhost')
     const parts = url.pathname.split('/')
 
     try {
-      const context = resolveContext(request)
-      const allowedProducts = products.filter((product) => product.isAllowed(context))
+      const profile = resolveDemoProfile(url, profiles)
+      const allowedProducts = products.filter((product) => product.isAllowed(profile.context))
+
+      if (request.method === 'GET' && url.pathname === '/api/demo-profiles') {
+        json(response, 200, { profiles: profiles.map(({ key, label }) => ({ key, label })) })
+        return
+      }
 
       if (request.method === 'GET' && url.pathname === '/api/products') {
         json(response, 200, { products: allowedProducts.map(({ key, label }) => ({ key, label })) })

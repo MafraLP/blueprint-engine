@@ -1,4 +1,4 @@
-import type { DemoContext, DemoProduct } from '../../shared/api/create-demo-server.js'
+import type { DemoContext, DemoProduct, DemoProfile } from '../../shared/api/create-demo-server.js'
 import { BirthdayCake, NakedCake } from './blueprints.js'
 
 export const cakeContexts = {
@@ -6,6 +6,12 @@ export const cakeContexts = {
   nanda: { id: 'nanda' },
   thiago: { id: 'thiago' }
 } as const satisfies Record<string, DemoContext>
+
+export const cakeDemoProfiles: readonly DemoProfile[] = [
+  { key: 'all-cakes', label: 'All Cake Products', context: cakeContexts.demo },
+  { key: 'nanda', label: 'Nanda — Birthday Cakes', context: cakeContexts.nanda },
+  { key: 'thiago', label: 'Thiago — Naked Cakes', context: cakeContexts.thiago }
+]
 
 // This is application policy, not Blueprint Engine configuration.
 export const cakeProducts: readonly DemoProduct[] = [

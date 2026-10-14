@@ -1,11 +1,10 @@
 import assert from 'node:assert/strict'
 import { once } from 'node:events'
 import test from 'node:test'
-import { cakeContexts } from '../../../.example-dist/examples/cake-shop/api/catalog.js'
 import { createCakeShopServer } from '../../../.example-dist/examples/cake-shop/api/server.js'
 
-async function withServer(context, callback) {
-  const server = createCakeShopServer(context)
+async function withServer(callback) {
+  const server = createCakeShopServer()
   server.listen(0)
   await once(server, 'listening')
 
@@ -23,10 +22,19 @@ async function withServer(context, callback) {
 }
 
 test('serves two schemas and rejects a manipulated birthday cake payload', async () => {
-  await withServer(cakeContexts.demo, async (baseUrl) => {
+  await withServer(async (baseUrl) => {
     const pageResponse = await fetch(baseUrl)
     assert.equal(pageResponse.status, 200)
     assert.match(await pageResponse.text(), /One engine, many product flows/)
+
+    const profiles = await fetch(`${baseUrl}/api/demo-profiles`).then((response) => response.json())
+    assert.deepEqual(profiles, {
+      profiles: [
+        { key: 'all-cakes', label: 'All Cake Products' },
+        { key: 'nanda', label: 'Nanda — Birthday Cakes' },
+        { key: 'thiago', label: 'Thiago — Naked Cakes' }
+      ]
+    })
 
     const productResponse = await fetch(`${baseUrl}/api/products`)
     assert.deepEqual(await productResponse.json(), {
@@ -64,13 +72,13 @@ test('serves two schemas and rejects a manipulated birthday cake payload', async
   })
 })
 
-test('keeps Cake Shop policy on the server for schema and submission', async () => {
-  await withServer(cakeContexts.nanda, async (baseUrl) => {
-    const products = await fetch(`${baseUrl}/api/products`).then((response) => response.json())
+test('uses a dummy profile to demonstrate blueprint availability', async () => {
+  await withServer(async (baseUrl) => {
+    const products = await fetch(`${baseUrl}/api/products?profile=nanda`).then((response) => response.json())
     assert.deepEqual(products, { products: [{ key: 'birthday-cake', label: 'Birthday Cake' }] })
 
-    assert.equal((await fetch(`${baseUrl}/api/products/birthday-cake/schema`)).status, 200)
-    assert.equal((await fetch(`${baseUrl}/api/products/birthday-cake/submit`, {
+    assert.equal((await fetch(`${baseUrl}/api/products/birthday-cake/schema?profile=nanda`)).status, 200)
+    assert.equal((await fetch(`${baseUrl}/api/products/birthday-cake/submit?profile=nanda`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
@@ -80,10 +88,10 @@ test('keeps Cake Shop policy on the server for schema and submission', async () 
       })
     })).status, 201)
 
-    assert.equal((await fetch(`${baseUrl}/api/products/naked-cake/schema`, {
+    assert.equal((await fetch(`${baseUrl}/api/products/naked-cake/schema?profile=nanda`, {
       headers: { 'x-tenant-id': 'thiago' }
     })).status, 404)
-    assert.equal((await fetch(`${baseUrl}/api/products/naked-cake/submit`, {
+    assert.equal((await fetch(`${baseUrl}/api/products/naked-cake/submit?profile=nanda`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-tenant-id': 'thiago' },
       body: JSON.stringify({ tenantId: 'thiago', fruit: 'fig', tiers: 2 })

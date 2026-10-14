@@ -1,11 +1,10 @@
 import assert from 'node:assert/strict'
 import { once } from 'node:events'
 import test from 'node:test'
-import { supplierContexts } from '../../../.example-dist/examples/supplier-onboarding/api/catalog.js'
 import { createSupplierOnboardingServer } from '../../../.example-dist/examples/supplier-onboarding/api/server.js'
 
-async function withServer(context, callback) {
-  const server = createSupplierOnboardingServer(context)
+async function withServer(callback) {
+  const server = createSupplierOnboardingServer()
   server.listen(0)
   await once(server, 'listening')
   const address = server.address()
@@ -22,7 +21,7 @@ async function withServer(context, callback) {
 }
 
 test('uses the shared renderer protocol for supplier onboarding', async () => {
-  await withServer(supplierContexts.demo, async (baseUrl) => {
+  await withServer(async (baseUrl) => {
     const page = await fetch(baseUrl)
     assert.match(await page.text(), /One engine, many product flows/)
 
@@ -52,13 +51,13 @@ test('uses the shared renderer protocol for supplier onboarding', async () => {
   })
 })
 
-test('keeps Supplier Onboarding policy on the server for schema and submission', async () => {
-  await withServer(supplierContexts.starter, async (baseUrl) => {
-    const products = await fetch(`${baseUrl}/api/products`).then((response) => response.json())
+test('uses a dummy profile to demonstrate blueprint availability', async () => {
+  await withServer(async (baseUrl) => {
+    const products = await fetch(`${baseUrl}/api/products?profile=starter`).then((response) => response.json())
     assert.deepEqual(products, { products: [{ key: 'sole-trader', label: 'Sole trader supplier' }] })
 
-    assert.equal((await fetch(`${baseUrl}/api/products/sole-trader/schema`)).status, 200)
-    assert.equal((await fetch(`${baseUrl}/api/products/sole-trader/submit`, {
+    assert.equal((await fetch(`${baseUrl}/api/products/sole-trader/schema?profile=starter`)).status, 200)
+    assert.equal((await fetch(`${baseUrl}/api/products/sole-trader/submit?profile=starter`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
@@ -69,10 +68,10 @@ test('keeps Supplier Onboarding policy on the server for schema and submission',
       })
     })).status, 201)
 
-    assert.equal((await fetch(`${baseUrl}/api/products/corporate/schema`, {
+    assert.equal((await fetch(`${baseUrl}/api/products/corporate/schema?profile=starter`, {
       headers: { 'x-plan': 'business' }
     })).status, 404)
-    assert.equal((await fetch(`${baseUrl}/api/products/corporate/submit`, {
+    assert.equal((await fetch(`${baseUrl}/api/products/corporate/submit?profile=starter`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-plan': 'business' },
       body: JSON.stringify({ plan: 'business', registeredName: 'Blueprint Ltd.' })

@@ -75,7 +75,13 @@ npm run example:supplier
 
 Open [http://localhost:3002](http://localhost:3002).
 
-See [Development Context](docs/development-context.md) for the concept and boundaries, the [Schema Specification](docs/schema-specification.md) for the public wire contract, [Domain Comparison](docs/domain-comparison.md) for validation across two domains, [Context and Policy Design](docs/context-policy.md) for the M4 trust boundary, and the [Implementation Roadmap](docs/implementation-roadmap.md) for the path from the experimental core to a mature open-source package.
+## Authentication and authorization
+
+Blueprint Engine is intentionally authentication- and authorization-agnostic. Its job is to turn backend DTO declarations into schemas and to validate the submitted values against those declarations. The demo profile selector is only a visual way to show how a host application can expose different blueprints; it is not authentication.
+
+In a real application, authenticate the request in your own stack, resolve the tenant, user, plan, or product entitlement there, and only then choose the DTO passed to `schemaFor()` and `parse()`.
+
+See [Development Context](docs/development-context.md) for the concept and boundaries, the [Schema Specification](docs/schema-specification.md) for the public wire contract, [Domain Comparison](docs/domain-comparison.md) for validation across two domains, [Demo Profile Design](docs/context-policy.md) for the M4 demonstration boundary, and the [Implementation Roadmap](docs/implementation-roadmap.md) for the path from the experimental core to a mature open-source package.
 
 ## License
 

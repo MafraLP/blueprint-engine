@@ -1,9 +1,14 @@
 const form = document.querySelector('#form')
+const profilePicker = document.querySelector('#demo-profile')
 const productPicker = document.querySelector('#product')
 const result = document.querySelector('#result')
 
 let activeProduct
 let activeSchema
+
+function apiUrl(path) {
+  return `${path}?${new URLSearchParams({ profile: profilePicker.value })}`
+}
 
 function fieldPath(prefix, key) {
   return prefix ? `${prefix}.${key}` : key
@@ -94,28 +99,37 @@ function renderForm() {
 }
 
 async function loadProduct(key) {
-  const response = await fetch(`/api/products/${key}/schema`)
+  const response = await fetch(apiUrl(`/api/products/${key}/schema`))
   const payload = await response.json()
   activeProduct = payload.product
   activeSchema = payload.schema
   renderForm()
 }
 
-async function initialize() {
-  const response = await fetch('/api/products')
+async function loadProducts() {
+  const response = await fetch(apiUrl('/api/products'))
   const { products } = await response.json()
+  productPicker.replaceChildren()
   for (const product of products) productPicker.append(new Option(product.label, product.key))
-  await loadProduct(productPicker.value)
+  if (productPicker.value) await loadProduct(productPicker.value)
+}
+
+async function initialize() {
+  const response = await fetch('/api/demo-profiles')
+  const { profiles } = await response.json()
+  for (const profile of profiles) profilePicker.append(new Option(profile.label, profile.key))
+  await loadProducts()
 }
 
 productPicker.addEventListener('change', () => loadProduct(productPicker.value))
+profilePicker.addEventListener('change', loadProducts)
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault()
   clearErrors()
   result.textContent = 'Submitting…'
 
-  const response = await fetch(`/api/products/${activeProduct.key}/submit`, {
+  const response = await fetch(apiUrl(`/api/products/${activeProduct.key}/submit`), {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(readProperties(activeSchema.properties))

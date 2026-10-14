@@ -29,7 +29,7 @@ Milestones are evidence gates, not calendar promises. A milestone is complete on
 | M1 | Runnable Cake Shop demonstration | M0 | Example API and web client |
 | M2 | Stable, documented schema contract | M1 | Schema specification and fixtures |
 | M3 | Proof across two domains | M2 | Second runnable example and comparison |
-| M4 | Safe context/policy integration guidance | M3 | Catalog and authorization example |
+| M4 | Host-controlled demo profile selection | M3 | Catalog and profile demonstration |
 | M5 | Installable public prerelease | M4 | npm `0.x`, CI, governance files |
 | M6 | Stable core release | M5 plus real adoption | `1.0.0` release and migration policy |
 
@@ -162,9 +162,9 @@ Implementation slices:
 
 Decision checkpoint: if the examples need incompatible abstractions, narrow the package's promise instead of adding a broad plugin system.
 
-### M4: Context and Policy Guidance (complete)
+### M4: Demo Profile Selection (complete)
 
-**Goal:** make multi-tenant use safe without coupling tenants to the engine.
+**Goal:** demonstrate host-controlled blueprint availability without coupling authentication to the engine.
 
 Implemented and documented in [Context and Policy Design](context-policy.md).
 

@@ -11,4 +11,4 @@ npm run example:supplier
 
 Open [http://localhost:3002](http://localhost:3002). The host application owns the catalog for sole-trader and corporate supplier flows. Both reuse the `BusinessAddress` nested DTO, while each product declares its own fields and constraints.
 
-The running demo uses a hardcoded server-side `supplier-demo` context that may access both flows. Tests also start the server with a `starter-organization` context to prove that it cannot read or submit the corporate flow. A real application must replace that fixed context with its authenticated host context.
+Use the **Demo profile** selector to switch between all flows, a Starter Organization, and a Business Organization. This selector is intentionally dummy and is not authentication. A real application must resolve its own authenticated context before selecting a blueprint.

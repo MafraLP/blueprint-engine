@@ -1,4 +1,4 @@
-import type { DemoContext, DemoProduct } from '../../shared/api/create-demo-server.js'
+import type { DemoContext, DemoProduct, DemoProfile } from '../../shared/api/create-demo-server.js'
 import { CorporateSupplier, SoleTraderSupplier } from './blueprints.js'
 
 export const supplierContexts = {
@@ -6,6 +6,12 @@ export const supplierContexts = {
   starter: { id: 'starter-organization' },
   business: { id: 'business-organization' }
 } as const satisfies Record<string, DemoContext>
+
+export const supplierDemoProfiles: readonly DemoProfile[] = [
+  { key: 'all-suppliers', label: 'All Supplier Flows', context: supplierContexts.demo },
+  { key: 'starter', label: 'Starter Organization', context: supplierContexts.starter },
+  { key: 'business', label: 'Business Organization', context: supplierContexts.business }
+]
 
 // The host application decides which supplier flows are available.
 export const supplierProducts: readonly DemoProduct[] = [
