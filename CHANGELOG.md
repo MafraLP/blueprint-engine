@@ -11,6 +11,7 @@ All notable changes to this project are documented here.
 ### Changed
 
 - Reworked the README around installation, usage, architecture boundaries, examples, and public documentation.
+- Added renderer integration guidance, including custom CSS ownership and the boundary for new component types.
 
 ## 0.1.0 - 2026-10-14
 

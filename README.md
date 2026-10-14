@@ -77,6 +77,12 @@ Blueprint Engine is deliberately small. It is not a UI component library, ORM, a
 
 Your application must authenticate the request, resolve tenant/user/product access, select an allowed DTO, and then call `schemaFor()` or `parse()`. Never trust a blueprint key selected by the client as an authorization decision.
 
+## Bring your own renderer and design system
+
+Blueprint Engine provides the schema; your front-end provides the rendering engine. Map schema component types to your React, Vue, Angular, native, or vanilla JavaScript inputs, then apply your own CSS, design tokens, layout, accessibility behavior, and file-storage flow.
+
+You can freely add product-specific DTO properties using `@Field` and `@Nested`. Creating a new *component type* (for example, `currency` or `date-range`) is different: it requires a public schema and validation contract and is not yet an extension point. See [Renderer integration](docs/renderer-integration.md) for a practical renderer map, recursive nested rendering, custom CSS, and the boundary between a new DTO field and a new engine component.
+
 ## Examples
 
 Two runnable examples exercise the same public API and shared renderer:
@@ -93,6 +99,7 @@ After starting an example, open the address printed in the terminal. The visible
 - [Schema specification](docs/schema-specification.md): wire contract, validation behavior, and compatibility policy.
 - [Development context](docs/development-context.md): problem statement and package boundaries.
 - [Context and policy design](docs/context-policy.md): host-controlled blueprint availability.
+- [Renderer integration](docs/renderer-integration.md): build and style an application-owned front-end renderer.
 - [Domain comparison](docs/domain-comparison.md): evidence across two unrelated domains.
 - [Implementation roadmap](docs/implementation-roadmap.md): path from experimental `0.x` to a stable release.
 
