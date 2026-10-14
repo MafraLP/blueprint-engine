@@ -33,6 +33,16 @@ test('renders multiple domains through one schema gallery server', async () => {
       ]
     })
 
+    const supplierProfiles = await fetch(`${baseUrl}/api/demo-profiles?demo=supplier-onboarding`).then((response) => response.json())
+    assert.deepEqual(supplierProfiles, {
+      profiles: [
+        { key: 'all-suppliers', label: 'All Supplier Flows' },
+        { key: 'starter', label: 'Starter Organization' },
+        { key: 'business', label: 'Business Organization' }
+      ]
+    })
+    assert.equal((await fetch(`${baseUrl}/api/demo-profiles?demo=supplier-onboarding&profile=nanda`)).status, 400)
+
     const cakeSchema = await fetch(`${baseUrl}/api/products/birthday-cake/schema?demo=cake-shop&profile=nanda`).then((response) => response.json())
     assert.equal(cakeSchema.schema.properties.topping.type, 'object')
 

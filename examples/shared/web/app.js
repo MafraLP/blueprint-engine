@@ -8,9 +8,9 @@ const result = document.querySelector('#result')
 let activeProduct
 let activeSchema
 
-function apiUrl(path) {
+function apiUrl(path, profile = profilePicker.value) {
   const query = new URLSearchParams({ demo: demoPicker.value })
-  if (profilePicker.value) query.set('profile', profilePicker.value)
+  if (profile) query.set('profile', profile)
   return `${path}?${query}`
 }
 
@@ -136,9 +136,10 @@ async function loadProducts() {
 }
 
 async function loadProfiles() {
-  const response = await fetch(apiUrl('/api/demo-profiles'))
-  const { profiles } = await response.json()
   profilePicker.replaceChildren()
+  const response = await fetch(apiUrl('/api/demo-profiles', ''))
+  if (!response.ok) throw new Error('Unable to load demo profiles.')
+  const { profiles } = await response.json()
   for (const profile of profiles) profilePicker.append(new Option(profile.label, profile.key))
   await loadProducts()
 }
