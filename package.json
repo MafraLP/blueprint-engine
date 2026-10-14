@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "description": "Declarative TypeScript blueprints for server-defined forms and validated commands.",
   "type": "module",
+  "author": "Lucas Mafra Pinheiro <lucasmafrapinheiro@gmail.com>",
+  "homepage": "https://github.com/MafraLP/blueprint-engine#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MafraLP/blueprint-engine.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MafraLP/blueprint-engine/issues"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -19,17 +28,26 @@
     "build:example": "tsc -p tsconfig.example.json",
     "example": "npm run build:example && node .example-dist/examples/cake-shop/api/server.js",
     "example:supplier": "npm run build:example && node .example-dist/examples/supplier-onboarding/api/server.js",
-    "test": "npm run build && npm run build:example && node --test test/*.test.mjs examples/*/api/*.test.mjs"
+    "test": "npm run build && npm run build:example && node --test test/*.test.mjs examples/*/api/*.test.mjs",
+    "prepack": "npm run build"
   },
   "keywords": [
     "typescript",
     "forms",
     "schema",
+    "server-driven-ui",
+    "form-schema",
     "validation",
     "ddd",
     "multi-tenant"
   ],
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@types/node": "^22.10.2",
     "typescript": "^5.7.2"

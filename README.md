@@ -8,6 +8,8 @@ Blueprint Engine helps applications support different product or tenant flows wi
 
 Experimental. The public API is intentionally small and may change before `1.0`.
 
+The planned prerelease package name is `@blueprint-engine/core`; it has not been published to npm yet.
+
 ## Example
 
 ```ts
@@ -55,6 +57,10 @@ if (!result.success) return result.errors
 npm install
 npm test
 ```
+
+## Publishing status
+
+The repository is prepared for an npm prerelease, but publication requires ownership of the `@blueprint-engine` npm scope and the final GitHub repository URL. Until then, evaluate the project from a clone with the commands above.
 
 ## Runnable demo
 

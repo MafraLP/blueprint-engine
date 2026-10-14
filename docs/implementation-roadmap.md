@@ -191,9 +191,11 @@ Implementation slices:
 
 Out of scope: identity providers, RBAC, tenant database schemas, and entitlement billing.
 
-### M5: Public Prerelease Readiness
+### M5: Public Prerelease Readiness (prepared; publication pending)
 
 **Goal:** make the package safe to adopt and easy to evaluate.
+
+Implementation is prepared locally. The package metadata provisionally targets `MafraLP/blueprint-engine`; publishing remains pending until that GitHub repository and the `@blueprint-engine` npm scope are confirmed.
 
 Deliverables:
 
@@ -224,6 +226,17 @@ Implementation slices:
 5. Publish an explicitly experimental `0.1.0` package only after the quick start is tested from a new directory.
 
 Release gate: a contributor who has never seen the repository must be able to follow the README without copying source files from the examples.
+
+Preparation checklist:
+
+- [x] Add package metadata, public publish configuration, Node engine requirement, and a reproducible lockfile.
+- [x] Add CI for clean install, test, and npm tarball inspection on Node 18 and 20.
+- [x] Add changelog, contribution guide, code of conduct, issue templates, and pull request template.
+- [x] Verify the tarball contains only published package files.
+- [x] Install the tarball into a fresh temporary consumer and import the public API.
+- [ ] Confirm ownership of the `@blueprint-engine` npm scope.
+- [ ] Create or confirm the `MafraLP/blueprint-engine` GitHub repository and set it as `origin`.
+- [ ] Publish `@blueprint-engine/core@0.1.0` with npm credentials owned by the maintainer.
 
 ### M6: Stable Core Release
 
