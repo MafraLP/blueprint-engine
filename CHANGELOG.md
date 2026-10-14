@@ -7,6 +7,7 @@ All notable changes to this project are documented here.
 ### Added
 
 - `FieldComponent` and `SCHEMA_VERSION` public constants for type-safe blueprint declarations and schema consumers.
+- Blueprint Gallery: one schema renderer across Cake Shop and Supplier Onboarding catalogs, with visible schemas and server results.
 
 ### Changed
 

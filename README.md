@@ -89,6 +89,7 @@ Two runnable examples exercise the same public API and shared renderer:
 
 | Example | Demonstrates | Run |
 | --- | --- | --- |
+| [Blueprint Gallery](examples/gallery/README.md) | One renderer switching across all available domains, profiles, schemas, and server results | `npm run example:gallery` |
 | [Cake Shop](examples/cake-shop/README.md) | Product variants, nested topping configuration, and server validation | `npm run example` |
 | [Supplier Onboarding](examples/supplier-onboarding/README.md) | A second domain with nested business details and policy-controlled availability | `npm run example:supplier` |
 

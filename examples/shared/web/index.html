@@ -3,14 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blueprint Engine — Product Demo</title>
+    <title>Blueprint Engine — Schema Gallery</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <main>
       <p class="eyebrow">Blueprint Engine demo</p>
       <h1>One engine, many product flows.</h1>
-      <p class="intro">The server selects a product blueprint, publishes its schema, and validates the submitted configuration.</p>
+      <p class="intro">The same front-end engine renders every server-selected blueprint, then returns the submitted configuration to the backend for authoritative validation.</p>
+
+      <label class="product-picker" for="demo">
+        Domain
+        <select id="demo"></select>
+      </label>
 
       <label class="product-picker" for="demo-profile">
         Demo profile
@@ -23,7 +28,17 @@
       </label>
 
       <form id="form" novalidate></form>
-      <pre id="result" aria-live="polite"></pre>
+
+      <section class="inspectors" aria-label="Blueprint inspection panels">
+        <details open>
+          <summary>Generated schema</summary>
+          <pre id="schema" aria-live="polite"></pre>
+        </details>
+        <details open>
+          <summary>Server result</summary>
+          <pre id="result" aria-live="polite"></pre>
+        </details>
+      </section>
     </main>
     <script type="module" src="/app.js"></script>
   </body>

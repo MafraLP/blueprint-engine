@@ -91,6 +91,8 @@ The schema describes semantics and validation hints; it does not prescribe visua
 
 The [shared demo renderer](../examples/shared/web/app.js) is a small framework-free reference implementation. It is deliberately not a package dependency or a prescribed design system.
 
+The [Blueprint Gallery](../examples/gallery/README.md) uses that exact renderer across multiple backend domains and exposes both the generated schema and server result. It is the recommended starting point when evaluating how one SaaS front-end can serve multiple blueprint catalogs.
+
 ## New DTO fields versus new component types
 
 These are different operations:

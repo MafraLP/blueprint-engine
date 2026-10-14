@@ -20,6 +20,13 @@ export interface DemoProfile {
   context: DemoContext
 }
 
+export interface DemoDefinition {
+  key: string
+  label: string
+  products: readonly DemoProduct[]
+  profiles: readonly DemoProfile[]
+}
+
 const webRoot = resolve(process.cwd(), 'examples/shared/web')
 const maxBodyBytes = 1_000_000
 const contentTypes: Record<string, string> = {
@@ -66,17 +73,30 @@ function resolveDemoProfile(url: URL, profiles: readonly DemoProfile[]): DemoPro
   return profile
 }
 
-export function createDemoServer(products: readonly DemoProduct[], profiles: readonly DemoProfile[]): Server {
+function resolveDemo(url: URL, demos: readonly DemoDefinition[]): DemoDefinition {
+  const key = url.searchParams.get('demo') ?? demos[0]?.key
+  const demo = demos.find((candidate) => candidate.key === key)
+  if (!demo) throw new Error('Unknown demo.')
+  return demo
+}
+
+export function createDemoServer(demos: readonly DemoDefinition[]): Server {
   return createServer(async (request, response) => {
     const url = new URL(request.url ?? '/', 'http://localhost')
     const parts = url.pathname.split('/')
 
     try {
-      const profile = resolveDemoProfile(url, profiles)
-      const allowedProducts = products.filter((product) => product.isAllowed(profile.context))
+      if (request.method === 'GET' && url.pathname === '/api/demos') {
+        json(response, 200, { demos: demos.map(({ key, label }) => ({ key, label })) })
+        return
+      }
+
+      const demo = resolveDemo(url, demos)
+      const profile = resolveDemoProfile(url, demo.profiles)
+      const allowedProducts = demo.products.filter((product) => product.isAllowed(profile.context))
 
       if (request.method === 'GET' && url.pathname === '/api/demo-profiles') {
-        json(response, 200, { profiles: profiles.map(({ key, label }) => ({ key, label })) })
+        json(response, 200, { profiles: demo.profiles.map(({ key, label }) => ({ key, label })) })
         return
       }
 

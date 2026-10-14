@@ -1,13 +1,17 @@
 const form = document.querySelector('#form')
+const demoPicker = document.querySelector('#demo')
 const profilePicker = document.querySelector('#demo-profile')
 const productPicker = document.querySelector('#product')
+const schemaOutput = document.querySelector('#schema')
 const result = document.querySelector('#result')
 
 let activeProduct
 let activeSchema
 
 function apiUrl(path) {
-  return `${path}?${new URLSearchParams({ profile: profilePicker.value })}`
+  const query = new URLSearchParams({ demo: demoPicker.value })
+  if (profilePicker.value) query.set('profile', profilePicker.value)
+  return `${path}?${query}`
 }
 
 function fieldPath(prefix, key) {
@@ -19,6 +23,31 @@ function errorNode(path) {
   node.className = 'error'
   node.dataset.errorPath = path
   return node
+}
+
+function input(type, schema) {
+  const control = document.createElement('input')
+  control.type = type
+  if (schema.minimum !== undefined) control.min = String(schema.minimum)
+  if (schema.maximum !== undefined) control.max = String(schema.maximum)
+  return control
+}
+
+const fieldRenderers = {
+  text: (schema) => input('text', schema),
+  number: (schema) => input('number', schema),
+  boolean: (schema) => input('checkbox', schema),
+  upload: (schema) => {
+    const control = input('url', schema)
+    control.placeholder = 'https://example.com/reference.png'
+    return control
+  },
+  select: (schema) => {
+    const control = document.createElement('select')
+    control.append(new Option('Select an option', ''))
+    for (const option of schema.enum ?? []) control.append(new Option(option, option))
+    return control
+  }
 }
 
 function renderProperties(properties, prefix = '', required = []) {
@@ -39,18 +68,9 @@ function renderProperties(properties, prefix = '', required = []) {
     wrapper.className = 'field'
     wrapper.append(`${schema.title}`)
 
-    let control
-    if (schema.type === 'select') {
-      control = document.createElement('select')
-      control.append(new Option('Select an option', ''))
-      for (const option of schema.enum) control.append(new Option(option, option))
-    } else {
-      control = document.createElement('input')
-      control.type = schema.type === 'number' ? 'number' : schema.type === 'boolean' ? 'checkbox' : schema.type === 'upload' ? 'url' : 'text'
-      if (schema.type === 'upload') control.placeholder = 'https://example.com/reference.png'
-      if (schema.minimum !== undefined) control.min = String(schema.minimum)
-      if (schema.maximum !== undefined) control.max = String(schema.maximum)
-    }
+    const renderer = fieldRenderers[schema.type]
+    if (!renderer) throw new Error(`Unsupported Blueprint component: ${schema.type}`)
+    const control = renderer(schema)
 
     control.name = path
     control.required = required.includes(key)
@@ -95,7 +115,8 @@ function renderForm() {
   submit.type = 'submit'
   submit.textContent = `Submit ${activeProduct.label}`
   form.append(submit)
-  result.textContent = ''
+  schemaOutput.textContent = JSON.stringify(activeSchema, null, 2)
+  result.textContent = 'Select values and submit to inspect the validated command.'
 }
 
 async function loadProduct(key) {
@@ -114,15 +135,25 @@ async function loadProducts() {
   if (productPicker.value) await loadProduct(productPicker.value)
 }
 
-async function initialize() {
-  const response = await fetch('/api/demo-profiles')
+async function loadProfiles() {
+  const response = await fetch(apiUrl('/api/demo-profiles'))
   const { profiles } = await response.json()
+  profilePicker.replaceChildren()
   for (const profile of profiles) profilePicker.append(new Option(profile.label, profile.key))
   await loadProducts()
 }
 
+async function initialize() {
+  const response = await fetch('/api/demos')
+  const { demos } = await response.json()
+  for (const demo of demos) demoPicker.append(new Option(demo.label, demo.key))
+  demoPicker.closest('label').hidden = demos.length < 2
+  await loadProfiles()
+}
+
 productPicker.addEventListener('change', () => loadProduct(productPicker.value))
 profilePicker.addEventListener('change', loadProducts)
+demoPicker.addEventListener('change', loadProfiles)
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault()
