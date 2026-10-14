@@ -18,7 +18,8 @@
     "build": "tsc -p tsconfig.json",
     "build:example": "tsc -p tsconfig.example.json",
     "example": "npm run build:example && node .example-dist/examples/cake-shop/api/server.js",
-    "test": "npm run build && npm run build:example && node --test test/*.test.mjs examples/cake-shop/api/*.test.mjs"
+    "example:supplier": "npm run build:example && node .example-dist/examples/supplier-onboarding/api/server.js",
+    "test": "npm run build && npm run build:example && node --test test/*.test.mjs examples/*/api/*.test.mjs"
   },
   "keywords": [
     "typescript",

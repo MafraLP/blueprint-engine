@@ -132,7 +132,7 @@ Implementation slices:
 
 Decision checkpoint: do not add JSON Schema compatibility unless M1 or an adopter proves that another renderer needs it.
 
-### M3: Second Domain Validation
+### M3: Second Domain Validation (complete)
 
 **Goal:** verify that the abstraction is not specific to cakes or a single SaaS.
 

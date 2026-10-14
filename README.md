@@ -67,7 +67,15 @@ npm run example
 
 Open [http://localhost:3000](http://localhost:3000). See [the example guide](examples/cake-shop/README.md) for its boundaries.
 
-See [Development Context](docs/development-context.md) for the concept and boundaries, the [Schema Specification](docs/schema-specification.md) for the public wire contract, and the [Implementation Roadmap](docs/implementation-roadmap.md) for the path from the experimental core to a mature open-source package.
+The same renderer also supports the [Supplier Onboarding example](examples/supplier-onboarding/README.md):
+
+```bash
+npm run example:supplier
+```
+
+Open [http://localhost:3002](http://localhost:3002).
+
+See [Development Context](docs/development-context.md) for the concept and boundaries, the [Schema Specification](docs/schema-specification.md) for the public wire contract, [Domain Comparison](docs/domain-comparison.md) for validation across two domains, and the [Implementation Roadmap](docs/implementation-roadmap.md) for the path from the experimental core to a mature open-source package.
 
 ## License
 

@@ -25,7 +25,7 @@ test('serves two schemas and rejects a manipulated birthday cake payload', async
   await withServer(async (baseUrl) => {
     const pageResponse = await fetch(baseUrl)
     assert.equal(pageResponse.status, 200)
-    assert.match(await pageResponse.text(), /One engine, two cake products/)
+    assert.match(await pageResponse.text(), /One engine, many product flows/)
 
     const productResponse = await fetch(`${baseUrl}/api/products`)
     assert.deepEqual(await productResponse.json(), {

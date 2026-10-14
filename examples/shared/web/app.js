@@ -42,7 +42,7 @@ function renderProperties(properties, prefix = '', required = []) {
     } else {
       control = document.createElement('input')
       control.type = schema.type === 'number' ? 'number' : schema.type === 'boolean' ? 'checkbox' : schema.type === 'upload' ? 'url' : 'text'
-      if (schema.type === 'upload') control.placeholder = 'https://example.com/topper.png'
+      if (schema.type === 'upload') control.placeholder = 'https://example.com/reference.png'
       if (schema.minimum !== undefined) control.min = String(schema.minimum)
       if (schema.maximum !== undefined) control.max = String(schema.maximum)
     }
@@ -88,7 +88,7 @@ function renderForm() {
   form.replaceChildren(renderProperties(activeSchema.properties, '', activeSchema.required))
   const submit = document.createElement('button')
   submit.type = 'submit'
-  submit.textContent = `Create ${activeProduct.label}`
+  submit.textContent = `Submit ${activeProduct.label}`
   form.append(submit)
   result.textContent = ''
 }
