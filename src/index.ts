@@ -5,8 +5,11 @@ export type {
   BlueprintSchema,
   Constructor,
   FieldComponent,
+  FieldSchema,
   FieldOptions,
+  NestedSchema,
   NestedOptions,
   ParseResult,
+  SchemaProperty,
   ValidationError
 } from './types.js'

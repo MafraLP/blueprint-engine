@@ -19,7 +19,24 @@ function propertyName(key: string | symbol): string {
   return key
 }
 
+function validateFieldOptions(options: FieldOptions): void {
+  if (!options.label.trim()) throw new TypeError('Field labels must not be empty.')
+  if (options.component === 'select' && !options.options?.length) {
+    throw new TypeError('Select fields must define at least one option.')
+  }
+  if (options.component !== 'select' && options.options !== undefined) {
+    throw new TypeError('Only select fields may define options.')
+  }
+  if (options.component !== 'number' && (options.min !== undefined || options.max !== undefined)) {
+    throw new TypeError('Only number fields may define minimum or maximum values.')
+  }
+  if (options.min !== undefined && options.max !== undefined && options.min > options.max) {
+    throw new RangeError('Field minimum must not exceed maximum.')
+  }
+}
+
 export function Field(options: FieldOptions): PropertyDecorator {
+  validateFieldOptions(options)
   return (target, key) => {
     ownDefinitions(target).push({ ...options, key: propertyName(key), kind: 'field' })
   }

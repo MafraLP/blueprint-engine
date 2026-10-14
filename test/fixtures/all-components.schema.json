@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "type": "object",
+  "properties": {
+    "text": { "type": "text", "title": "Text" },
+    "number": { "type": "number", "title": "Number", "minimum": 1, "maximum": 10 },
+    "boolean": { "type": "boolean", "title": "Boolean" },
+    "select": { "type": "select", "title": "Select", "enum": ["first", "second"] },
+    "upload": { "type": "upload", "title": "Upload" },
+    "nested": {
+      "type": "object",
+      "title": "Nested",
+      "properties": { "note": { "type": "text", "title": "Note" } },
+      "required": ["note"]
+    },
+    "optionalText": { "type": "text", "title": "Optional text" }
+  },
+  "required": ["text", "number", "boolean", "select", "upload", "nested"]
+}

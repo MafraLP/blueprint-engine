@@ -1,0 +1,38 @@
+[
+  {
+    "name": "wrong number type",
+    "input": {
+      "text": "valid",
+      "number": "2",
+      "boolean": false,
+      "select": "first",
+      "upload": "https://example.test/topper.png",
+      "nested": { "note": "nested" }
+    },
+    "errors": [{ "path": "number", "message": "must be a number" }]
+  },
+  {
+    "name": "maximum number",
+    "input": {
+      "text": "valid",
+      "number": 11,
+      "boolean": false,
+      "select": "first",
+      "upload": "https://example.test/topper.png",
+      "nested": { "note": "nested" }
+    },
+    "errors": [{ "path": "number", "message": "must be at most 10" }]
+  },
+  {
+    "name": "non-object nested value",
+    "input": {
+      "text": "valid",
+      "number": 2,
+      "boolean": false,
+      "select": "first",
+      "upload": "https://example.test/topper.png",
+      "nested": []
+    },
+    "errors": [{ "path": "nested", "message": "must be an object" }]
+  }
+]

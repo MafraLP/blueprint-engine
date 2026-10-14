@@ -32,7 +32,15 @@ function parseInto<T extends object>(dto: Constructor<T>, input: unknown, prefix
 
   const value = new dto()
   const errors: ValidationError[] = []
-  for (const definition of definitionsFor(dto)) {
+  const definitions = definitionsFor(dto)
+  const knownKeys = new Set(definitions.map((definition) => definition.key))
+  for (const key of Object.keys(input)) {
+    if (!knownKeys.has(key)) {
+      errors.push({ path: prefix ? `${prefix}.${key}` : key, message: 'is not allowed' })
+    }
+  }
+
+  for (const definition of definitions) {
     const fieldPath = prefix ? `${prefix}.${definition.key}` : definition.key
     const rawValue = input[definition.key]
 

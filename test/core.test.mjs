@@ -18,6 +18,7 @@ Nested({ dto: Topping, label: 'Topping configuration', required: true })(Birthda
 
 test('generates a stable nested schema', () => {
   assert.deepEqual(schemaFor(BirthdayCake), {
+    schemaVersion: 1,
     type: 'object',
     properties: {
       message: { type: 'text', title: 'Cake message' },

@@ -1,0 +1,10 @@
+[
+  { "path": "unexpected", "message": "is not allowed" },
+  { "path": "text", "message": "must be a string" },
+  { "path": "number", "message": "must be at least 1" },
+  { "path": "boolean", "message": "must be a boolean" },
+  { "path": "select", "message": "must be one of the configured options" },
+  { "path": "upload", "message": "must be a string" },
+  { "path": "nested.unexpected", "message": "is not allowed" },
+  { "path": "nested.note", "message": "is required" }
+]

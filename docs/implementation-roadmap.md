@@ -98,7 +98,7 @@ Implementation slices:
 
 Out of scope: tenant persistence, uploads, user accounts, a configurable catalog UI, and framework adapters.
 
-### M2: Schema Contract Hardening
+### M2: Schema Contract Hardening (complete)
 
 **Goal:** make the schema a deliberate public contract rather than an implementation detail.
 

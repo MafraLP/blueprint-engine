@@ -38,8 +38,26 @@ export type ParseResult<T> =
   | { success: true; value: T }
   | { success: false; errors: ValidationError[] }
 
-export interface BlueprintSchema {
+export interface FieldSchema {
+  type: FieldComponent
+  title: string
+  minimum?: number
+  maximum?: number
+  enum?: readonly string[]
+}
+
+export interface NestedSchema {
   type: 'object'
-  properties: Record<string, unknown>
+  title: string
+  properties: Record<string, SchemaProperty>
+  required: string[]
+}
+
+export type SchemaProperty = FieldSchema | NestedSchema
+
+export interface BlueprintSchema {
+  schemaVersion: 1
+  type: 'object'
+  properties: Record<string, SchemaProperty>
   required: string[]
 }
