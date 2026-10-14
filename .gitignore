@@ -4,3 +4,6 @@ dist/
 coverage/
 *.tsbuildinfo
 .DS_Store
+
+# Private working drafts. Public package documentation remains in docs/.
+docs/private/
