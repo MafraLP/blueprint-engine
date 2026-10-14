@@ -4,7 +4,7 @@
 
 Blueprint Engine defines an input contract. It does not decide who may use that contract. The host application must resolve trusted request context and authorize a blueprint before it calls either `schemaFor` or `parse`.
 
-This document is the implementation boundary for M4. It deliberately does not add authentication, roles, tenant storage, billing, or authorization code to the core package.
+The M4 demos implement this boundary with hardcoded server-side contexts. They deliberately do not add authentication, roles, tenant storage, billing, or authorization code to the core package.
 
 ## Trust Boundary
 
@@ -81,15 +81,21 @@ These policies are illustrative only. They are application configuration, not li
 
 The policy may be a static list, a database query, a feature flag, or an entitlement service. The engine does not care, as long as the host supplies an authorized DTO constructor.
 
+## Demo Contexts
+
+The examples use fixed context values passed when each server is created. The Cake Shop demo starts with `cake-demo`, while Supplier Onboarding starts with `supplier-demo`; both are allowed to show every product so the UI remains useful for exploration. Tests create restricted server instances (`nanda` and `starter-organization`) to prove denied access.
+
+No request body field or arbitrary request header changes this context. This is a safe way to demonstrate the authorization boundary without pretending that the demo implements real authentication. Production hosts must replace the fixed resolver with a resolver backed by verified identity.
+
 ## Required M4 Changes
 
-1. Change the shared demo server to accept a host-provided context resolver and product resolver.
-2. Keep the current public product list only for a deliberate, authorized context; never list every catalog entry by default.
-3. Update Cake Shop and Supplier Onboarding to model two trusted contexts each.
-4. Resolve policy before serving a schema and before parsing a submission.
-5. Add end-to-end tests for an allowed schema, denied schema, allowed submission, and denied submission.
-6. Ensure denied requests cannot reveal the schema or validation behavior of the unavailable DTO.
-7. Add a short security note to each example README explaining where real authentication belongs.
+1. [x] Change the shared demo server to accept a host-provided context resolver and product resolver.
+2. [x] Filter the product list through the authorized context.
+3. [x] Model at least two server-side contexts in Cake Shop and Supplier Onboarding.
+4. [x] Resolve policy before serving a schema and before parsing a submission.
+5. [x] Add end-to-end tests for an allowed schema, denied schema, allowed submission, and denied submission.
+6. [x] Ensure denied requests cannot reveal the schema or validation behavior of the unavailable DTO.
+7. [x] Add a security note to each example README explaining where real authentication belongs.
 
 ## Acceptance Tests
 

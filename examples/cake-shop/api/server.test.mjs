@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict'
 import { once } from 'node:events'
 import test from 'node:test'
+import { cakeContexts } from '../../../.example-dist/examples/cake-shop/api/catalog.js'
 import { createCakeShopServer } from '../../../.example-dist/examples/cake-shop/api/server.js'
 
-async function withServer(callback) {
-  const server = createCakeShopServer()
+async function withServer(context, callback) {
+  const server = createCakeShopServer(context)
   server.listen(0)
   await once(server, 'listening')
 
@@ -22,7 +23,7 @@ async function withServer(callback) {
 }
 
 test('serves two schemas and rejects a manipulated birthday cake payload', async () => {
-  await withServer(async (baseUrl) => {
+  await withServer(cakeContexts.demo, async (baseUrl) => {
     const pageResponse = await fetch(baseUrl)
     assert.equal(pageResponse.status, 200)
     assert.match(await pageResponse.text(), /One engine, many product flows/)
@@ -60,5 +61,32 @@ test('serves two schemas and rejects a manipulated birthday cake payload', async
       body: JSON.stringify({ fruit: 'fig', tiers: 2 })
     })
     assert.equal(validResponse.status, 201)
+  })
+})
+
+test('keeps Cake Shop policy on the server for schema and submission', async () => {
+  await withServer(cakeContexts.nanda, async (baseUrl) => {
+    const products = await fetch(`${baseUrl}/api/products`).then((response) => response.json())
+    assert.deepEqual(products, { products: [{ key: 'birthday-cake', label: 'Birthday Cake' }] })
+
+    assert.equal((await fetch(`${baseUrl}/api/products/birthday-cake/schema`)).status, 200)
+    assert.equal((await fetch(`${baseUrl}/api/products/birthday-cake/submit`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        message: 'Happy birthday',
+        tiers: 2,
+        topping: { flavour: 'vanilla', colour: 'white' }
+      })
+    })).status, 201)
+
+    assert.equal((await fetch(`${baseUrl}/api/products/naked-cake/schema`, {
+      headers: { 'x-tenant-id': 'thiago' }
+    })).status, 404)
+    assert.equal((await fetch(`${baseUrl}/api/products/naked-cake/submit`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-tenant-id': 'thiago' },
+      body: JSON.stringify({ tenantId: 'thiago', fruit: 'fig', tiers: 2 })
+    })).status, 404)
   })
 })

@@ -162,11 +162,11 @@ Implementation slices:
 
 Decision checkpoint: if the examples need incompatible abstractions, narrow the package's promise instead of adding a broad plugin system.
 
-### M4: Context and Policy Guidance
+### M4: Context and Policy Guidance (complete)
 
 **Goal:** make multi-tenant use safe without coupling tenants to the engine.
 
-Design prepared in [Context and Policy Design](context-policy.md). Implementation remains pending.
+Implemented and documented in [Context and Policy Design](context-policy.md).
 
 Deliverables:
 

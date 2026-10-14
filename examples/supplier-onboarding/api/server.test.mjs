@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict'
 import { once } from 'node:events'
 import test from 'node:test'
+import { supplierContexts } from '../../../.example-dist/examples/supplier-onboarding/api/catalog.js'
 import { createSupplierOnboardingServer } from '../../../.example-dist/examples/supplier-onboarding/api/server.js'
 
-async function withServer(callback) {
-  const server = createSupplierOnboardingServer()
+async function withServer(context, callback) {
+  const server = createSupplierOnboardingServer(context)
   server.listen(0)
   await once(server, 'listening')
   const address = server.address()
@@ -21,7 +22,7 @@ async function withServer(callback) {
 }
 
 test('uses the shared renderer protocol for supplier onboarding', async () => {
-  await withServer(async (baseUrl) => {
+  await withServer(supplierContexts.demo, async (baseUrl) => {
     const page = await fetch(baseUrl)
     assert.match(await page.text(), /One engine, many product flows/)
 
@@ -48,5 +49,33 @@ test('uses the shared renderer protocol for supplier onboarding', async () => {
       { path: 'employeeCount', message: 'is required' },
       { path: 'address', message: 'is required' }
     ])
+  })
+})
+
+test('keeps Supplier Onboarding policy on the server for schema and submission', async () => {
+  await withServer(supplierContexts.starter, async (baseUrl) => {
+    const products = await fetch(`${baseUrl}/api/products`).then((response) => response.json())
+    assert.deepEqual(products, { products: [{ key: 'sole-trader', label: 'Sole trader supplier' }] })
+
+    assert.equal((await fetch(`${baseUrl}/api/products/sole-trader/schema`)).status, 200)
+    assert.equal((await fetch(`${baseUrl}/api/products/sole-trader/submit`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        legalName: 'Ava Stone',
+        personalTaxId: 'TAX-123',
+        tradeLicenseUrl: 'https://example.test/license.pdf',
+        address: { street: '1 Market Street', city: 'Porto Alegre', country: 'Brazil' }
+      })
+    })).status, 201)
+
+    assert.equal((await fetch(`${baseUrl}/api/products/corporate/schema`, {
+      headers: { 'x-plan': 'business' }
+    })).status, 404)
+    assert.equal((await fetch(`${baseUrl}/api/products/corporate/submit`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-plan': 'business' },
+      body: JSON.stringify({ plan: 'business', registeredName: 'Blueprint Ltd.' })
+    })).status, 404)
   })
 })
