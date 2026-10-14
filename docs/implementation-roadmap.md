@@ -166,6 +166,8 @@ Decision checkpoint: if the examples need incompatible abstractions, narrow the 
 
 **Goal:** make multi-tenant use safe without coupling tenants to the engine.
 
+Design prepared in [Context and Policy Design](context-policy.md). Implementation remains pending.
+
 Deliverables:
 
 - A documented host-application catalog example: `context -> allowed blueprint`.
