@@ -191,11 +191,11 @@ Implementation slices:
 
 Out of scope: identity providers, RBAC, tenant database schemas, and entitlement billing.
 
-### M5: Public Prerelease Readiness (prepared; publication pending)
+### M5: Public Prerelease Readiness (complete)
 
 **Goal:** make the package safe to adopt and easy to evaluate.
 
-Implementation is prepared locally. The package metadata provisionally targets `MafraLP/blueprint-engine`; publishing remains pending until that GitHub repository and the `@blueprint-engine` npm scope are confirmed.
+Published as [`@blueprint-engine/core@0.1.0`](https://www.npmjs.com/package/@blueprint-engine/core). The package metadata targets `MafraLP/blueprint-engine`.
 
 Deliverables:
 
@@ -234,9 +234,9 @@ Preparation checklist:
 - [x] Add changelog, contribution guide, code of conduct, issue templates, and pull request template.
 - [x] Verify the tarball contains only published package files.
 - [x] Install the tarball into a fresh temporary consumer and import the public API.
-- [ ] Confirm ownership of the `@blueprint-engine` npm scope.
-- [ ] Create or confirm the `MafraLP/blueprint-engine` GitHub repository and set it as `origin`.
-- [ ] Publish `@blueprint-engine/core@0.1.0` with npm credentials owned by the maintainer.
+- [x] Confirm ownership of the `@blueprint-engine` npm scope.
+- [x] Create or confirm the `MafraLP/blueprint-engine` GitHub repository and set it as `origin`.
+- [x] Publish `@blueprint-engine/core@0.1.0` with npm credentials owned by the maintainer.
 
 ### M6: Stable Core Release
 

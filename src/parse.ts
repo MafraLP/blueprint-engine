@@ -1,3 +1,4 @@
+import { FieldComponent } from './constants.js'
 import { definitionsFor } from './metadata.js'
 import type { Constructor, Definition, ParseResult, ValidationError } from './types.js'
 
@@ -15,10 +16,10 @@ function validateField(definition: Extract<Definition, { kind: 'field' }>, value
   }
 
   const errors: ValidationError[] = []
-  if (definition.component === 'number' && typeof value !== 'number') errors.push({ path, message: 'must be a number' })
-  if ((definition.component === 'text' || definition.component === 'upload') && typeof value !== 'string') errors.push({ path, message: 'must be a string' })
-  if (definition.component === 'boolean' && typeof value !== 'boolean') errors.push({ path, message: 'must be a boolean' })
-  if (definition.component === 'select' && (typeof value !== 'string' || !definition.options?.includes(value))) {
+  if (definition.component === FieldComponent.Number && typeof value !== 'number') errors.push({ path, message: 'must be a number' })
+  if ((definition.component === FieldComponent.Text || definition.component === FieldComponent.Upload) && typeof value !== 'string') errors.push({ path, message: 'must be a string' })
+  if (definition.component === FieldComponent.Boolean && typeof value !== 'boolean') errors.push({ path, message: 'must be a boolean' })
+  if (definition.component === FieldComponent.Select && (typeof value !== 'string' || !definition.options?.includes(value))) {
     errors.push({ path, message: 'must be one of the configured options' })
   }
 

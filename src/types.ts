@@ -1,6 +1,6 @@
-export type Constructor<T extends object = object> = new () => T
+import type { FieldComponent } from './constants.js'
 
-export type FieldComponent = 'text' | 'number' | 'boolean' | 'select' | 'upload'
+export type Constructor<T extends object = object> = new () => T
 
 export interface FieldOptions {
   component: FieldComponent

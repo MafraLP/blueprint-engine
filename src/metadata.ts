@@ -1,3 +1,4 @@
+import { FieldComponent } from './constants.js'
 import type { Constructor, Definition, FieldDefinition, FieldOptions, NestedDefinition, NestedOptions } from './types.js'
 
 const definitionsByPrototype = new WeakMap<object, Definition[]>()
@@ -21,13 +22,13 @@ function propertyName(key: string | symbol): string {
 
 function validateFieldOptions(options: FieldOptions): void {
   if (!options.label.trim()) throw new TypeError('Field labels must not be empty.')
-  if (options.component === 'select' && !options.options?.length) {
+  if (options.component === FieldComponent.Select && !options.options?.length) {
     throw new TypeError('Select fields must define at least one option.')
   }
-  if (options.component !== 'select' && options.options !== undefined) {
+  if (options.component !== FieldComponent.Select && options.options !== undefined) {
     throw new TypeError('Only select fields may define options.')
   }
-  if (options.component !== 'number' && (options.min !== undefined || options.max !== undefined)) {
+  if (options.component !== FieldComponent.Number && (options.min !== undefined || options.max !== undefined)) {
     throw new TypeError('Only number fields may define minimum or maximum values.')
   }
   if (options.min !== undefined && options.max !== undefined && options.min > options.max) {

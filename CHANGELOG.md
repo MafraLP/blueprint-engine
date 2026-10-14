@@ -6,11 +6,20 @@ All notable changes to this project are documented here.
 
 ### Added
 
+- `FieldComponent` and `SCHEMA_VERSION` public constants for type-safe blueprint declarations and schema consumers.
+
+### Changed
+
+- Reworked the README around installation, usage, architecture boundaries, examples, and public documentation.
+
+## 0.1.0 - 2026-10-14
+
+### Added
+
 - Experimental decorator-based DTO declarations, schema generation, and server-side parsing.
 - Cake Shop and Supplier Onboarding runnable demonstrations.
 - Versioned Blueprint Schema contract and validation fixtures.
 
 ### Notes
 
-- No package version has been published yet.
 - Until `1.0`, public APIs and schema details may change with documented migration notes.

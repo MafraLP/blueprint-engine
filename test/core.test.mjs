@@ -1,24 +1,24 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { Field, Nested, parse, schemaFor } from '../dist/index.js'
+import { Field, FieldComponent, Nested, parse, SCHEMA_VERSION, schemaFor } from '../dist/index.js'
 
 class Topping {
   name
 }
-Field({ component: 'text', label: 'Topping', required: true })(Topping.prototype, 'name')
+Field({ component: FieldComponent.Text, label: 'Topping', required: true })(Topping.prototype, 'name')
 
 class BirthdayCake {
   message
   tiers
   topping
 }
-Field({ component: 'text', label: 'Cake message', required: true })(BirthdayCake.prototype, 'message')
-Field({ component: 'number', label: 'Tiers', required: true, min: 1 })(BirthdayCake.prototype, 'tiers')
+Field({ component: FieldComponent.Text, label: 'Cake message', required: true })(BirthdayCake.prototype, 'message')
+Field({ component: FieldComponent.Number, label: 'Tiers', required: true, min: 1 })(BirthdayCake.prototype, 'tiers')
 Nested({ dto: Topping, label: 'Topping configuration', required: true })(BirthdayCake.prototype, 'topping')
 
 test('generates a stable nested schema', () => {
   assert.deepEqual(schemaFor(BirthdayCake), {
-    schemaVersion: 1,
+    schemaVersion: SCHEMA_VERSION,
     type: 'object',
     properties: {
       message: { type: 'text', title: 'Cake message' },

@@ -1,3 +1,4 @@
+import { SCHEMA_VERSION } from './constants.js'
 import { definitionsFor } from './metadata.js'
 import type { BlueprintSchema, Constructor, SchemaProperty } from './types.js'
 
@@ -28,5 +29,5 @@ export function schemaFor(dto: Constructor): BlueprintSchema {
     }
   }
 
-  return { schemaVersion: 1, type: 'object', properties, required }
+  return { schemaVersion: SCHEMA_VERSION, type: 'object', properties, required }
 }

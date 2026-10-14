@@ -1,10 +1,10 @@
+export { FieldComponent, SCHEMA_VERSION } from './constants.js'
 export { Field, Nested } from './metadata.js'
 export { parse } from './parse.js'
 export { schemaFor } from './schema.js'
 export type {
   BlueprintSchema,
   Constructor,
-  FieldComponent,
   FieldSchema,
   FieldOptions,
   NestedSchema,

@@ -1,30 +1,53 @@
 # Blueprint Engine
 
+[![CI](https://github.com/MafraLP/blueprint-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/MafraLP/blueprint-engine/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/@blueprint-engine/core.svg)](https://www.npmjs.com/package/@blueprint-engine/core)
+[![license](https://img.shields.io/npm/l/@blueprint-engine/core.svg)](LICENSE)
+
 Declarative TypeScript blueprints for server-defined forms and validated commands.
 
-Blueprint Engine helps applications support different product or tenant flows without spreading customer-specific branches across controllers, pages, and persistence code. Declare a DTO once, generate a schema for the client, and validate the submitted input on the server.
+Blueprint Engine helps B2B and multi-tenant applications add configurable product flows without spreading customer-specific `if` statements across controllers, pages, and persistence code. Define the input contract once in the backend; publish a JSON-friendly schema to the client; validate the submitted payload against that same contract.
 
-## Status
+```text
+Blueprint DTO -> schemaFor() -> client renderer
+Client input  -> parse()     -> validated command
+```
 
-Experimental. The public API is intentionally small and may change before `1.0`.
+## Why Blueprint Engine?
 
-The planned prerelease package name is `@blueprint-engine/core`; it has not been published to npm yet.
+The first customer usually fits a hard-coded form. The second customer often needs a different field, constraint, or nested configuration. Copying pages and branching shared services makes each new product flow more expensive.
 
-## Example
+Blueprint Engine keeps that variability close to the product contract. A host application owns catalog and access policy; the engine owns declaration metadata, schema generation, and server-side input validation.
+
+## Install
+
+```bash
+npm install @blueprint-engine/core
+```
+
+Requirements: Node.js 18 or newer and TypeScript with decorators enabled.
+
+## Quick start
 
 ```ts
-import { Field, Nested, parse, schemaFor } from '@blueprint-engine/core'
+import {
+  Field,
+  FieldComponent,
+  Nested,
+  parse,
+  schemaFor
+} from '@blueprint-engine/core'
 
 class Topping {
-  @Field({ component: 'text', label: 'Topping', required: true })
+  @Field({ component: FieldComponent.Text, label: 'Topping', required: true })
   declare name: string
 }
 
 class BirthdayCake {
-  @Field({ component: 'text', label: 'Cake message', required: true })
+  @Field({ component: FieldComponent.Text, label: 'Cake message', required: true })
   declare message: string
 
-  @Field({ component: 'number', label: 'Tiers', required: true, min: 1 })
+  @Field({ component: FieldComponent.Number, label: 'Tiers', required: true, min: 1 })
   declare tiers: number
 
   @Nested({ dto: Topping, label: 'Topping configuration', required: true })
@@ -38,57 +61,51 @@ if (!result.success) return result.errors
 // result.value is a hydrated BirthdayCake command.
 ```
 
-## What it does
+`FieldComponent` is a typed set of the currently supported components: `Text`, `Number`, `Boolean`, `Select`, and `Upload`. String values such as `component: 'text'` remain supported when they are more convenient. `SCHEMA_VERSION` exposes the current public schema contract version.
 
-- Declares fields and nested contracts with decorators.
-- Produces deterministic, JSON-friendly schemas.
-- Validates and hydrates submitted input on the server.
-- Keeps product/tenant policy outside the shared engine.
+## What it provides
 
-## What it does not do
+- `@Field` declares a primitive input, rendering hint, and intrinsic validation.
+- `@Nested` composes reusable DTO contracts.
+- `schemaFor()` generates a deterministic, JSON-friendly schema for a client renderer.
+- `parse()` rejects malformed or unknown input, validates it, and hydrates a DTO instance.
+- Structured errors use stable field paths, including nested paths such as `topping.name`.
 
-- Render a UI, persist data, authorize tenants, or execute domain actions.
-- Replace a complete JSON Schema implementation.
-- Eliminate conditionals; it keeps variable rules close to the blueprint that owns them.
+## Architecture boundary
 
-## Development
+Blueprint Engine is deliberately small. It is not a UI component library, ORM, authorization system, tenant registry, upload service, generic rules engine, or full JSON Schema implementation.
 
-```bash
-npm install
-npm test
-```
+Your application must authenticate the request, resolve tenant/user/product access, select an allowed DTO, and then call `schemaFor()` or `parse()`. Never trust a blueprint key selected by the client as an authorization decision.
 
-## Publishing status
+## Examples
 
-The repository is prepared for an npm prerelease, but publication requires ownership of the `@blueprint-engine` npm scope and the final GitHub repository URL. Until then, evaluate the project from a clone with the commands above.
+Two runnable examples exercise the same public API and shared renderer:
 
-## Runnable demo
+| Example | Demonstrates | Run |
+| --- | --- | --- |
+| [Cake Shop](examples/cake-shop/README.md) | Product variants, nested topping configuration, and server validation | `npm run example` |
+| [Supplier Onboarding](examples/supplier-onboarding/README.md) | A second domain with nested business details and policy-controlled availability | `npm run example:supplier` |
 
-The Cake Shop example renders two server-defined product forms and validates submissions with the same DTOs:
+After starting an example, open the address printed in the terminal. The visible profile selector is a teaching control only; it is not authentication.
 
-```bash
-npm install
-npm run example
-```
+## Documentation
 
-Open [http://localhost:3000](http://localhost:3000). See [the example guide](examples/cake-shop/README.md) for its boundaries.
+- [Schema specification](docs/schema-specification.md): wire contract, validation behavior, and compatibility policy.
+- [Development context](docs/development-context.md): problem statement and package boundaries.
+- [Context and policy design](docs/context-policy.md): host-controlled blueprint availability.
+- [Domain comparison](docs/domain-comparison.md): evidence across two unrelated domains.
+- [Implementation roadmap](docs/implementation-roadmap.md): path from experimental `0.x` to a stable release.
 
-The same renderer also supports the [Supplier Onboarding example](examples/supplier-onboarding/README.md):
+## Project status
 
-```bash
-npm run example:supplier
-```
+`@blueprint-engine/core@0.1.0` is publicly available on npm. The API is experimental until `1.0.0`; breaking changes in `0.x` are documented in the [changelog](CHANGELOG.md).
 
-Open [http://localhost:3002](http://localhost:3002).
+The core is dependency-free at runtime and tested against Node.js 18 and 20 in CI.
 
-## Authentication and authorization
+## Contributing
 
-Blueprint Engine is intentionally authentication- and authorization-agnostic. Its job is to turn backend DTO declarations into schemas and to validate the submitted values against those declarations. The demo profile selector is only a visual way to show how a host application can expose different blueprints; it is not authentication.
-
-In a real application, authenticate the request in your own stack, resolve the tenant, user, plan, or product entitlement there, and only then choose the DTO passed to `schemaFor()` and `parse()`.
-
-See [Development Context](docs/development-context.md) for the concept and boundaries, the [Schema Specification](docs/schema-specification.md) for the public wire contract, [Domain Comparison](docs/domain-comparison.md) for validation across two domains, [Demo Profile Design](docs/context-policy.md) for the M4 demonstration boundary, and the [Implementation Roadmap](docs/implementation-roadmap.md) for the path from the experimental core to a mature open-source package.
+Bug reports, domain examples, and API feedback are welcome. Please read the [contribution guide](CONTRIBUTING.md) and [code of conduct](CODE_OF_CONDUCT.md) before opening an issue or pull request.
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE) © Lucas Mafra Pinheiro
