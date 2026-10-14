@@ -56,6 +56,17 @@ npm install
 npm test
 ```
 
+## Runnable demo
+
+The Cake Shop example renders two server-defined product forms and validates submissions with the same DTOs:
+
+```bash
+npm install
+npm run example
+```
+
+Open [http://localhost:3000](http://localhost:3000). See [the example guide](examples/cake-shop/README.md) for its boundaries.
+
 See [Development Context](docs/development-context.md) for the concept and boundaries, and the [Implementation Roadmap](docs/implementation-roadmap.md) for the path from the experimental core to a mature open-source package.
 
 ## License

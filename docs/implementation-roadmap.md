@@ -62,7 +62,7 @@ Checklist:
 - [x] Write the README, development context, license, and roadmap.
 - [x] Make the initial commit.
 
-### M1: End-to-End Cake Shop Demonstration
+### M1: End-to-End Cake Shop Demonstration (complete)
 
 **Goal:** prove the core works in a real request/response loop.
 
@@ -94,7 +94,7 @@ Implementation slices:
 2. Add `examples/cake-shop/web` with one renderer for the components already supported by the core.
 3. Add one schema endpoint and one submit endpoint; keep both handlers application code.
 4. Add an end-to-end test that submits valid and invalid payloads.
-5. Record a short GIF or video and add exact run instructions to the README.
+5. Add exact run instructions to the README; record a short GIF or video before the first public announcement.
 
 Out of scope: tenant persistence, uploads, user accounts, a configurable catalog UI, and framework adapters.
 

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blueprint Engine — Cake Shop</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">Blueprint Engine demo</p>
+      <h1>One engine, two cake products.</h1>
+      <p class="intro">The server selects a product blueprint, publishes its schema, and validates the submitted configuration.</p>
+
+      <label class="product-picker" for="product">
+        Product
+        <select id="product"></select>
+      </label>
+
+      <form id="form" novalidate></form>
+      <pre id="result" aria-live="polite"></pre>
+    </main>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
